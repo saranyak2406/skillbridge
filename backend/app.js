@@ -64,6 +64,18 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Route Imports
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const sectionRoutes = require('./routes/sectionRoutes');
+const lessonRoutes = require('./routes/lessonRoutes');
+const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const progressRoutes = require('./routes/progressRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+const assignmentRoutes = require('./routes/assignmentRoutes');
+const certificateRoutes = require('./routes/certificateRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 // Static file serving for uploads (course thumbnails, avatars, assignment files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -81,7 +93,10 @@ app.get('/', (req, res) => {
       users: '/api/users',
       categories: '/api/categories',
       courses: '/api/courses',
+      sections: '/api/sections',
+      lessons: '/api/lessons',
       enrollments: '/api/enrollments',
+      progress: '/api/progress',
       quizzes: '/api/quizzes',
       assignments: '/api/assignments',
       certificates: '/api/certificates',
@@ -106,18 +121,18 @@ app.get('/api/health', async (req, res) => {
 // Mounted API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-
-// Placeholder for future phase routes
-// app.use('/api/categories', categoryRoutes);
-// app.use('/api/courses', courseRoutes);
-// app.use('/api/enrollments', enrollmentRoutes);
-// app.use('/api/progress', progressRoutes);
-// app.use('/api/quizzes', quizRoutes);
-// app.use('/api/assignments', assignmentRoutes);
-// app.use('/api/certificates', certificateRoutes);
-// app.use('/api/reviews', reviewRoutes);
-// app.use('/api/payments', paymentRoutes);
-// app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/sections', sectionRoutes);
+app.use('/api/lessons', lessonRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/certificates', certificateRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // 404 Route Handler
 app.use('*', (req, res) => {
