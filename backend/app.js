@@ -61,6 +61,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Route Imports
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 // Static file serving for uploads (course thumbnails, avatars, assignment files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -99,9 +103,11 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
+// Mounted API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+
 // Placeholder for future phase routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes);
 // app.use('/api/categories', categoryRoutes);
 // app.use('/api/courses', courseRoutes);
 // app.use('/api/enrollments', enrollmentRoutes);
@@ -139,3 +145,4 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+

@@ -184,3 +184,4 @@ npm run dev
 | **Admin** | `admin@skillbridge.com` | `Admin@123` | Full platform control, approvals, analytics |
 | **Instructor** | `instructor@skillbridge.com` | `Instructor@123` | Course creation, quizzes, grading |
 | **Student** | `student@skillbridge.com` | `Student@123` | Enrollment, learning, assessments |
+
