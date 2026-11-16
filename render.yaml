@@ -38,3 +38,4 @@ databases:
     databaseName: skillbridge_db
     user: skillbridge_user
     plan: free
+
