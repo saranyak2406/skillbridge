@@ -17,3 +17,4 @@ router.get('/:id/submissions', protect, authorize('instructor', 'admin'), getAss
 router.patch('/submissions/:id/grade', protect, authorize('instructor', 'admin'), gradeSubmission);
 
 module.exports = router;
+

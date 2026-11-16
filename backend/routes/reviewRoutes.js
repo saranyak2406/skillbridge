@@ -7,3 +7,4 @@ router.post('/', protect, createReview);
 router.get('/course/:id', getCourseReviews);
 
 module.exports = router;
+

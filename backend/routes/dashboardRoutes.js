@@ -12,3 +12,4 @@ router.get('/instructor', protect, authorize('instructor', 'admin'), getInstruct
 router.get('/admin', protect, authorize('admin'), getAdminDashboard);
 
 module.exports = router;
+

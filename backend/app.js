@@ -76,6 +76,7 @@ const certificateRoutes = require('./routes/certificateRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 // Static file serving for uploads (course thumbnails, avatars, assignment files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -103,6 +104,7 @@ app.get('/', (req, res) => {
       reviews: '/api/reviews',
       payments: '/api/payments',
       dashboard: '/api/dashboard',
+      notifications: '/api/notifications',
     },
   });
 });
@@ -133,6 +135,7 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // 404 Route Handler
 app.use('*', (req, res) => {

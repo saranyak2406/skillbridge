@@ -12,3 +12,4 @@ router.delete('/:id', protect, authorize('instructor', 'admin'), deleteSection);
 router.post('/:id/lessons', protect, authorize('instructor', 'admin'), createLesson);
 
 module.exports = router;
+

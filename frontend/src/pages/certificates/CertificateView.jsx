@@ -187,3 +187,4 @@ const CertificateView = () => {
 };
 
 export default CertificateView;
+

@@ -12,3 +12,4 @@ router.post('/verify', protect, verifyPayment);
 router.get('/history', protect, getPaymentHistory);
 
 module.exports = router;
+

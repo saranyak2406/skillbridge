@@ -560,3 +560,4 @@ const CurriculumBuilder = () => {
 };
 
 export default CurriculumBuilder;
+

@@ -14,3 +14,4 @@ router.get('/verify/:certificateNumber', verifyCertificate);
 router.get('/:id/download', downloadCertificatePdf);
 
 module.exports = router;
+

@@ -30,3 +30,4 @@ router.get('/:id/sections', getSectionsByCourse);
 router.post('/:id/sections', protect, authorize('instructor', 'admin'), createSection);
 
 module.exports = router;
+

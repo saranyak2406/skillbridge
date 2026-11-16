@@ -267,3 +267,4 @@ module.exports = {
   getInstructorDashboard,
   getAdminDashboard,
 };
+

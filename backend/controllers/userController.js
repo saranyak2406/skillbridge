@@ -1,4 +1,73 @@
+const bcrypt = require('bcryptjs');
 const { query, getClient } = require('../config/db');
+const { validateRegisterInput } = require('../validators/authValidator');
+
+/**
+ * @desc    Create a new user by Admin
+ * @route   POST /api/users
+ * @access  Private/Admin
+ */
+const createUser = async (req, res, next) => {
+  const client = await getClient();
+
+  try {
+    const { full_name, email, password, role = 'student' } = req.body;
+
+    if (!full_name || !email || !password) {
+      return res.status(400).json({ status: 'fail', message: 'Full name, email, and password are required.' });
+    }
+
+    if (!['admin', 'instructor', 'student'].includes(role)) {
+      return res.status(400).json({ status: 'fail', message: 'Invalid role.' });
+    }
+
+    // Check duplicate email
+    const checkEmail = await client.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    if (checkEmail.rowCount > 0) {
+      return res.status(409).json({ status: 'fail', message: 'Email is already registered.' });
+    }
+
+    await client.query('BEGIN');
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const userRes = await client.query(
+      `INSERT INTO users (full_name, email, password_hash, role)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, full_name, email, role, is_active, created_at`,
+      [full_name.trim(), email.toLowerCase().trim(), passwordHash, role]
+    );
+
+    const newUser = userRes.rows[0];
+
+    // Create profile
+    if (role === 'instructor') {
+      await client.query(
+        `INSERT INTO instructor_profiles (user_id, expertise) VALUES ($1, 'General Instruction')`,
+        [newUser.id]
+      );
+    } else if (role === 'student') {
+      await client.query(
+        `INSERT INTO student_profiles (user_id, education) VALUES ($1, 'Undergraduate')`,
+        [newUser.id]
+      );
+    }
+
+    await client.query('COMMIT');
+
+    res.status(201).json({
+      status: 'success',
+      message: 'User created successfully.',
+      data: { user: newUser },
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    next(error);
+  } finally {
+    client.release();
+  }
+};
 
 /**
  * @desc    Get all users (Admin only) with pagination and filters
@@ -280,6 +349,7 @@ const deleteUser = async (req, res, next) => {
 };
 
 module.exports = {
+  createUser,
   getAllUsers,
   getUserById,
   updateUser,

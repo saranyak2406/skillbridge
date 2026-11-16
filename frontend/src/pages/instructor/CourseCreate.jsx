@@ -245,3 +245,4 @@ const CourseCreate = () => {
 };
 
 export default CourseCreate;
+

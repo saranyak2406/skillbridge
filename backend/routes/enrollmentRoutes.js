@@ -12,3 +12,4 @@ router.get('/my-courses', protect, getMyEnrolledCourses);
 router.get('/course/:id/students', protect, authorize('instructor', 'admin'), getCourseStudents);
 
 module.exports = router;
+

@@ -16,3 +16,4 @@ router.post('/attempts/:id/submit', protect, submitQuizAttempt);
 router.get('/attempts/:id/results', protect, getAttemptResults);
 
 module.exports = router;
+

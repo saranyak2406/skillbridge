@@ -418,3 +418,4 @@ const QuizTake = () => {
 };
 
 export default QuizTake;
+
