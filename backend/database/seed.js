@@ -327,8 +327,14 @@ async function seedDatabase() {
     console.error('Seeding encountered an error:', err.message);
   } finally {
     client.release();
-    await pool.end();
+    if (require.main === module) {
+      await pool.end();
+    }
   }
 }
 
-seedDatabase();
+if (require.main === module) {
+  seedDatabase();
+}
+
+module.exports = { seedDatabase };

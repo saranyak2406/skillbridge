@@ -182,9 +182,21 @@ app.use((err, req, res, next) => {
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
   });
 
+  let userMessage = err.message || 'An unexpected internal server error occurred';
+  if (
+    err.code === 'ECONNREFUSED' ||
+    err.code === '28P01' ||
+    err.code === '3D000' ||
+    err.message?.includes('ECONNREFUSED') ||
+    err.message?.includes('password authentication') ||
+    err.message?.includes('Connection terminated')
+  ) {
+    userMessage = 'Database connection error: PostgreSQL is unreachable or DATABASE_URL is not configured on Render.';
+  }
+
   res.status(statusCode).json({
     status,
-    message: err.message || 'An unexpected internal server error occurred',
+    message: userMessage,
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 });

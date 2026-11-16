@@ -24,8 +24,18 @@ const server = app.listen(PORT, async () => {
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('====================================================');
 
-  // Verify database connectivity
-  await testConnection();
+  // Verify database connectivity and auto-initialize tables if needed
+  const isConnected = await testConnection();
+  if (isConnected) {
+    try {
+      const { autoInitDatabase } = require('./database/autoInit');
+      await autoInitDatabase();
+    } catch (e) {
+      console.warn('⚠️ [AutoInit] Auto-init encountered notice:', e.message);
+    }
+  } else {
+    console.warn('⚠️ [PostgreSQL] Database not connected. Please set a valid DATABASE_URL in your environment.');
+  }
 });
 
 // Handle unhandled promise rejections
