@@ -12,3 +12,4 @@ router.patch('/mark-all-read', protect, markAllAsRead);
 router.patch('/:id/read', protect, markAsRead);
 
 module.exports = router;
+

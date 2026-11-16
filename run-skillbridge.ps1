@@ -36,3 +36,4 @@ Write-Host "  - Student:    student@skillbridge.com    / Student@123" -Foregroun
 Write-Host "  - Instructor: instructor@skillbridge.com / Instructor@123" -ForegroundColor White
 Write-Host "  - Admin:      admin@skillbridge.com      / Admin@123" -ForegroundColor White
 Write-Host "====================================================" -ForegroundColor Cyan
+
