@@ -9,9 +9,11 @@
     "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,cyan\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "db:init": "npm run db:init --prefix backend",
     "db:seed": "npm run db:seed --prefix backend",
-    "build": "npm run build --prefix frontend"
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "build:all": "npm --prefix backend install && npm --prefix frontend install && npm --prefix frontend run build",
+    "start": "node backend/server.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^9.1.2"
   }
 }

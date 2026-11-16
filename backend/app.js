@@ -81,33 +81,40 @@ const notificationRoutes = require('./routes/notificationRoutes');
 // Static file serving for uploads (course thumbnails, avatars, assignment files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Root & Health Check Endpoint
-app.get('/', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    name: 'SkillBridge API',
-    version: '1.0.0',
-    description: 'Online Learning & Skill Development Platform REST API',
-    endpoints: {
-      health: '/api/health',
-      auth: '/api/auth',
-      users: '/api/users',
-      categories: '/api/categories',
-      courses: '/api/courses',
-      sections: '/api/sections',
-      lessons: '/api/lessons',
-      enrollments: '/api/enrollments',
-      progress: '/api/progress',
-      quizzes: '/api/quizzes',
-      assignments: '/api/assignments',
-      certificates: '/api/certificates',
-      reviews: '/api/reviews',
-      payments: '/api/payments',
-      dashboard: '/api/dashboard',
-      notifications: '/api/notifications',
-    },
+const fs = require('fs');
+
+// Root API Endpoint (when frontend dist is not present)
+const frontendDist = path.join(__dirname, '../frontend/dist');
+const hasFrontendDist = fs.existsSync(frontendDist);
+
+if (!hasFrontendDist) {
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      status: 'success',
+      name: 'SkillBridge API',
+      version: '1.0.0',
+      description: 'Online Learning & Skill Development Platform REST API',
+      endpoints: {
+        health: '/api/health',
+        auth: '/api/auth',
+        users: '/api/users',
+        categories: '/api/categories',
+        courses: '/api/courses',
+        sections: '/api/sections',
+        lessons: '/api/lessons',
+        enrollments: '/api/enrollments',
+        progress: '/api/progress',
+        quizzes: '/api/quizzes',
+        assignments: '/api/assignments',
+        certificates: '/api/certificates',
+        reviews: '/api/reviews',
+        payments: '/api/payments',
+        dashboard: '/api/dashboard',
+        notifications: '/api/notifications',
+      },
+    });
   });
-});
+}
 
 app.get('/api/health', async (req, res) => {
   const dbStatus = await testConnection();
@@ -137,7 +144,18 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// 404 Route Handler
+// Serve static frontend files if built (e.g. on monolithic production deploy)
+if (hasFrontendDist) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
+// 404 Route Handler for unhandled API or static routes
 app.use('*', (req, res) => {
   res.status(404).json({
     status: 'fail',
